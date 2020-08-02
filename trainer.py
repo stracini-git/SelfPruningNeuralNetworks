@@ -23,8 +23,8 @@ tf.compat.v1.keras.backend.set_session(get_session())
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--outputpath', type=str, default="Outputs")
-parser.add_argument('--trainweights', type=bool, default=False, choices=[True, False])
-parser.add_argument('--trainmasks', type=bool, default=True, choices=[True, False])
+parser.add_argument("--trainweights", type=str, default='False', choices=["True", "False", "true", "false", "1", "0", "yes", "no", "y", "n"])
+parser.add_argument("--trainmasks", type=str, default='True', choices=["True", "False", "true", "false", "1", "0", "yes", "no", "y", "n"])
 parser.add_argument('--nettype', type=str, default='LeNet', choices=["LeNet", "Conv2", "Conv4", "Conv6"])
 parser.add_argument('--p1', type=float, default=0.5)
 parser.add_argument('--alpha', type=float, default=0)
@@ -38,6 +38,13 @@ parser.add_argument('--seed', type=int, default=0)
 
 args = parser.parse_args()
 
+
+def str2bool(v):
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    
 
 def getmasks(net):
     masks = []
@@ -258,17 +265,6 @@ def PrepareConv2(data, myseed, initializer, activation, masktype, trainW, trainM
 
 
 def main(args):
-    ParamTrainingTypes = {
-        "Baseline": [(True, False), 0],
-        "FreePruning": [(False, True), 0],
-        "MinPruning": [(False, True), -1],
-        "MaxPruning": [(True, True), 1],
-        "FreeFlipping": [(False, True), 0],
-        "MinFlipping": [(False, True), -1],
-        "MaxFlipping": [(False, True), 1]
-
-    }
-
     myseed = None if args.seed == 0 else args.seed
     p1 = args.p1
     lr = args.lr
@@ -280,8 +276,8 @@ def main(args):
     activation = args.activation
     masktype = args.masktype
 
-    train_weights = args.trainweights
-    train_masks = args.trainmasks
+    train_weights = str2bool(args.trainweights)
+    train_masks = str2bool(args.trainmasks)
     alpha = args.alpha
     trainingtype = "" + "TrainWeights" * train_weights + "TrainMasks" * train_masks
     outputpath = args.outputpath + "/" + trainingtype
@@ -321,6 +317,8 @@ def main(args):
     network.summary()
     NetworkTrainer(network, data, outputpath, batchsize, maxepochs)
     kb.clear_session()
+
+    return
 
 
 if __name__ == '__main__':
