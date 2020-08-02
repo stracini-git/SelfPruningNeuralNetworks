@@ -4,10 +4,11 @@ The connectivity graph of a randomly initialized neural network can be trained d
 with back-propagation without ever training the actual weights of the network. The link to the
 original paper is here: [https://arxiv.org/abs/2006.16627](https://arxiv.org/abs/2006.16627). 
 This repository shows how to train a neural network with fixed, random weights, through 
-self-pruning layers.
+self-pruning layers. These networks are used here for doing image classification on MNIST
+and CIFAR.
 
 #### How to run
-This will run a default experiment: trains a pruning mask for a LeNet-300-100 with fixed weights.
+This will run a default experiment: trains a pruning mask for a LeNet-300-100 with fixed weights on MNIST.
 ```markdown
 python MaskTrainer.py
 ```
