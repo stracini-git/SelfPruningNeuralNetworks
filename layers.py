@@ -6,7 +6,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import Layer
 from tensorflow.keras import backend as K
 import numpy as np
-from functions import heconstant, activate, mask, mask_rs, flip, binary
+from Functions import heconstant, activate, mask, mask_rs, flip, binary
 
 minval = 0.01
 maxval = 0.1
@@ -65,15 +65,6 @@ class MaskedConv2D(Layer):
         si = tf.compat.v1.keras.initializers.RandomUniform(minval=minval, maxval=maxval, seed=self.seed)
         self.score = self.add_weight(name='score', shape=kshape, initializer=si, trainable=self.trainM)
 
-        """
-        This is a regularization term. If alpha is:
-        0   - There is no constraint on the number of weights, the network will prune as many 
-              weights as necessary, this method is called "free pruning".
-        1   - The network will prune as many weights as possible while keeping the loss small.
-              This method is called "maximal pruning".
-        -1  - The network will prune as less weights as possible while keeping the loss small
-              This method is called "minimal pruning"
-        """
         if self.alpha != 0:
             self.add_loss(self.alpha * tf.reduce_mean(self.masktype(self.score)))
 
@@ -164,24 +155,12 @@ class MaskedDense(Layer):
 
         kshape = (input_shape.as_list()[1], self.output_dim)
 
-        # these are the standard weights
+        # define weights using the API available method (self.add_weights)
         self.kernel = self.add_weight(name='kernel', shape=kshape, initializer=ki, trainable=self.trainW)
 
-        # score initializer
         si = tf.compat.v1.keras.initializers.RandomUniform(minval=minval, maxval=maxval, seed=self.seed)
-
-        # this score will be passed to a masking function which will disable the corresponding weights
         self.score = self.add_weight(name='score', shape=kshape, initializer=si, trainable=self.trainM)
 
-        """
-        This is a regularization term. If alpha is:
-        0   - There is no constraint on the number of weights, the network will prune as many 
-              weights as necessary, this method is called "free pruning".
-        1   - The network will prune as many weights as possible while keeping the loss small.
-              This method is called "maximal pruning".
-        -1  - The network will prune as less weights as possible while keeping the loss small
-              This method is called "minimal pruning"
-        """
         if self.alpha != 0:
             self.add_loss(self.alpha * tf.reduce_mean(self.masktype(self.score)))
 

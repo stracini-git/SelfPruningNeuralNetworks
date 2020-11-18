@@ -89,9 +89,7 @@ def PlotAccuracy(mypath):
     AxAccuracy.set_ylabel("Test Accuracy", fontsize=18)
     AxSparsity.set_ylabel("Pruned Weights", fontsize=18)
 
-    AxAccuracy.set_title(mypath, fontsize=10)
     AxAccuracy.set_ylim((.90, 1.007))
-    AxSparsity.set_ylim((.0, 1.01))
 
     fig.tight_layout(pad=1)
 
@@ -105,7 +103,9 @@ def PlotAccuracy(mypath):
 
 
 def main():
-    mypath = "Outputs/TrainMasks/LeNet/P1_0.5/alpha_0/mask_relu_he_LR0.001/bs_25/"
+    mypath = "Outputs/FreePruning/LeNet/P1_0.5/mask_relu_heconstant_LR0.001/"
+    mypath = "Outputs/FreePruning/LeNet/P1_0.5/mask_relu_he_LR0.001/"
+    mypath = "Outputs/MaxPruning/LeNet/P1_0.5/mask_relu_he_LR0.001/"
     MergeTrainLogs(mypath)
     PlotAccuracy(mypath)
 

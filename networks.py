@@ -5,7 +5,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import MaxPooling2D, Input, Flatten
-from layers import MaskedDense, MaskedConv2D
+from Layers import MaskedDense, MaskedConv2D
 
 
 def makeMaskedCNN(inshape, cnn_arch, dense_arch, activation, myseed, initializer, masktype, trainW, trainM, p1, alpha):
